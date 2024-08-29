@@ -41,7 +41,7 @@ public:
             cout << temp->data << " ";
             temp = temp->next;
         }
-        cout << endl;
+        cout<<endl;
     }
 
     void displayBackward() {
