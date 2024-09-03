@@ -7,7 +7,7 @@ public:
     Node* next;
     Node(int val) {
         data = val;
-        next = nullptr;
+        next = NULL;
     }
 };
 
@@ -18,12 +18,12 @@ private:
 
 public:
     QueueLinkedList() {
-        front = rear = nullptr;
+        front = rear = NULL;
     }
 
     void enqueue(int value) {
         Node* temp = new Node(value);
-        if (rear == nullptr) {
+        if (rear == NULL) {
             front = rear = temp;
             cout << "Enqueued " << value << endl;
             return;
@@ -34,26 +34,26 @@ public:
     }
 
     void dequeue() {
-        if (front == nullptr) {
+        if (front == NULL) {
             cout << "Queue is empty" << endl;
             return;
         }
         Node* temp = front;
         front = front->next;
 
-        if (front == nullptr) rear = nullptr;
+        if (front == NULL) rear = NULL;
 
         cout << "Dequeued " << temp->data << endl;
         delete temp;
     }
 
     void display() {
-        if (front == nullptr) {
+        if (front == NULL) {
             cout << "Queue is empty" << endl;
             return;
         }
         Node* temp = front;
-        while (temp != nullptr) {
+        while (temp != NULL) {
             cout << temp->data << " ";
             temp = temp->next;
         }
