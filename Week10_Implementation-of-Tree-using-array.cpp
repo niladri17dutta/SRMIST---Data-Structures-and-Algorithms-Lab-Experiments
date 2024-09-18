@@ -1,94 +1,105 @@
 #include <iostream>
-#include <vector>
 using namespace std;
 
 class BinaryTree {
 private:
-    vector<int> treeArray;  // Keeps it private to enforce encapsulation
-    int capacity;           // Maximum capacity of the tree
+    int* treeArray;
+    int size;
 
 public:
-    BinaryTree(int size) {
-        treeArray.resize(size, -1);  // Initialize array with -1 to indicate empty slots
-        capacity = size;
-    }
+    // Constructor to initialize tree of given size
+    BinaryTree(int n) {
+        size = n;
+        treeArray = new int[size];
 
-    void setRoot(int value) {
-        treeArray[0] = value;
-    }
-
-    void setLeftChild(int parentIndex, int value) {
-        int leftChildIndex = 2 * parentIndex + 1;
-        if (leftChildIndex < capacity) {
-            treeArray[leftChildIndex] = value;
-        } else {
-            cout << "No space to insert left child for parent at index " << parentIndex << endl;
+        // Initialize the tree with -1 (assuming -1 represents an empty node)
+        for (int i = 0; i < size; i++) {
+            treeArray[i] = -1;
         }
     }
 
-    void setRightChild(int parentIndex, int value) {
-        int rightChildIndex = 2 * parentIndex + 2;
-        if (rightChildIndex < capacity) {
-            treeArray[rightChildIndex] = value;
-        } else {
-            cout << "No space to insert right child for parent at index " << parentIndex << endl;
+    // Insert element into the tree
+    void insert(int value, int index) {
+        if (index >= size) {
+            cout << "Index out of bounds!" << endl;
+            return;
         }
+        treeArray[index] = value;
     }
 
-    // Getter function to access treeArray elements
-    int getNodeValue(int index) const {
-        if (index < capacity) {
-            return treeArray[index];
+    // Function to get left child of a node at index i
+    int leftChild(int index) {
+        int leftIndex = 2 * index + 1;
+        if (leftIndex < size && treeArray[leftIndex] != -1) {
+            return treeArray[leftIndex];
         }
-        return -1;  // Return -1 for invalid indices
+        return -1;  // No left child
     }
 
-    void printTree() const {
-        cout << "Tree representation in array: ";
-        for (int i = 0; i < capacity; i++) {
-            if (treeArray[i] != -1)
+    // Function to get right child of a node at index i
+    int rightChild(int index) {
+        int rightIndex = 2 * index + 2;
+        if (rightIndex < size && treeArray[rightIndex] != -1) {
+            return treeArray[rightIndex];
+        }
+        return -1;  // No right child
+    }
+
+    // Display the tree
+    void displayTree() {
+        cout << "Tree elements: ";
+        for (int i = 0; i < size; i++) {
+            if (treeArray[i] != -1) {
                 cout << treeArray[i] << " ";
-            else
-                cout << "- ";  // Indicate empty nodes
+            } else {
+                cout << "_ ";  // Represent empty nodes as "_"
+            }
         }
         cout << endl;
+    }
+
+    // Destructor to free the allocated memory
+    ~BinaryTree() {
+        delete[] treeArray;
     }
 };
 
 int main() {
-    int n;
-    cout << "Enter the total number of nodes for the tree: ";
-    cin >> n;
+    int size;
+    
+    // Get the size of the tree from the user
+    cout << "Enter the size of the tree: ";
+    cin >> size;
+    
+    // Create a tree of the given size
+    BinaryTree tree(size);
 
-    BinaryTree tree(n);
+    int value, index;
+    char choice;
+    
+    // Input nodes from the user
+    do {
+        cout << "Enter the value to insert: ";
+        cin >> value;
+        cout << "Enter the index to insert the value (0 to " << size - 1 << "): ";
+        cin >> index;
+        
+        // Insert the value at the specified index
+        tree.insert(value, index);
 
-    int value, parentIndex, choice;
-
-    cout << "Enter the value for the root: ";
-    cin >> value;
-    tree.setRoot(value);
-
-    for (int i = 0; i < n; i++) {
-        cout << "\nChoose action for node at index " << i << " (current value = " 
-             << tree.getNodeValue(i) << "):" << endl;  // Use the getter function
-        cout << "1. Set Left Child\n";
-        cout << "2. Set Right Child\n";
-        cout << "3. Skip this node\n";
+        cout << "Do you want to insert another value? (y/n): ";
         cin >> choice;
+        
+    } while (choice == 'y' || choice == 'Y');
 
-        if (choice == 1 || choice == 2) {
-            cout << "Enter the value for the child: ";
-            cin >> value;
-            if (choice == 1) {
-                tree.setLeftChild(i, value);
-            } else if (choice == 2) {
-                tree.setRightChild(i, value);
-            }
-        }
+    // Display the tree
+    tree.displayTree();
+
+    // Display left and right children of the root (if root exists)
+    if (size > 0) {
+        cout << "Left child of root: " << tree.leftChild(0) << endl;
+        cout << "Right child of root: " << tree.rightChild(0) << endl;
     }
-
-    // Print the final tree structure
-    tree.printTree();
 
     return 0;
 }
